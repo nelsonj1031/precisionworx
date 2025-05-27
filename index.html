@@ -75,7 +75,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        .menu, .services-popup, .facilities-popup, .certifications-popup, .contact-popup {
+        .menu, .services-popup, .facilities-popup, .certifications-popup, .contact-popup, .mobile-nav-popup {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -92,7 +92,7 @@
             transform: translate(-50%, -50%) scale(0.9);
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .menu.show, .services-popup.show, .facilities-popup.show, .certifications-popup.show, .contact-popup.show {
+        .menu.show, .services-popup.show, .facilities-popup.show, .certifications-popup.show, .contact-popup.show, .mobile-nav-popup.show {
             display: block;
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
@@ -103,18 +103,21 @@
         .services-popup, .facilities-popup, .certifications-popup, .contact-popup {
             width: 400px;
         }
+        .mobile-nav-popup {
+            width: 250px;
+        }
         .menu .logo, .services-popup .logo, .facilities-popup .logo, .certifications-popup .logo, .contact-popup .logo {
             max-width: 150px;
             max-height: 150px;
             display: block;
             margin: 0 auto 20px;
         }
-        .menu ul, .services-popup ul, .facilities-popup ul, .certifications-popup ul, .contact-popup ul {
+        .menu ul, .services-popup ul, .facilities-popup ul, .certifications-popup ul, .contact-popup ul, .mobile-nav-popup ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        .menu li {
+        .menu li, .mobile-nav-popup li {
             padding: 10px 0;
             font-family: 'Flama', sans-serif;
             font-size: 18px;
@@ -130,7 +133,7 @@
             cursor: default;
             text-align: left;
         }
-        .menu li:hover {
+        .menu li:hover, .mobile-nav-popup li:hover {
             color: #888;
         }
         .services-popup .field, .certifications-popup .field, .contact-popup .field {
@@ -258,10 +261,57 @@
         .home-icon:hover::after {
             background: #888;
         }
+        .menu-icon {
+            display: none;
+            width: 24px;
+            height: 18px;
+            position: relative;
+            cursor: pointer;
+        }
+        .menu-icon span,
+        .menu-icon::before,
+        .menu-icon::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #333;
+            transition: all 0.3s ease;
+        }
+        .menu-icon::before {
+            top: 0;
+        }
+        .menu-icon span {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .menu-icon::after {
+            bottom: 0;
+        }
+        .menu-icon:hover::before,
+        .menu-icon:hover span,
+        .menu-icon:hover::after {
+            background: #888;
+        }
+        @media screen and (max-width: 768px) {
+            .navbar ul {
+                display: none;
+            }
+            .menu-icon {
+                display: block;
+            }
+            .navbar {
+                justify-content: flex-end;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
+        <div class="menu-icon" onclick="toggleMobileNav()">
+            <span></span>
+        </div>
         <ul>
             <li onclick="openServices()">Services</li>
             <li onclick="openFacilities()">Our Facilities</li>
@@ -276,6 +326,16 @@
         <ul id="menu-items">
             <li onclick="openServices()">Services</li>
             <li onclick="openFacilities()">Our Facilities</li>
+            <li onclick="openCertifications()">Certifications</li>
+            <li onclick="openContact()">Contact</li>
+        </ul>
+    </div>
+    <div class="mobile-nav-popup" id="mobile-nav-popup">
+        <div class="close-icon" onclick="toggleMobileNav()"></div>
+        <ul id="mobile-nav-items">
+            <li onclick="openServices()">Services</li>
+            <li onclick="openFacilities()">Our Facilities</li>
+            <li><div class="home-icon"></div></li>
             <li onclick="openCertifications()">Certifications</li>
             <li onclick="openContact()">Contact</li>
         </ul>
@@ -468,7 +528,7 @@
         });
 
         function closeAllPopups() {
-            const popups = ['menu', 'services-popup', 'facilities-popup', 'certifications-popup', 'contact-popup'];
+            const popups = ['menu', 'services-popup', 'facilities-popup', 'certifications-popup', 'contact-popup', 'mobile-nav-popup'];
             const logo = document.getElementById('logo');
             popups.forEach(popupId => {
                 const popup = document.getElementById(popupId);
@@ -500,6 +560,20 @@
                 menu.insertBefore(logo, menuItems);
                 logo.classList.add('menu-open');
                 setTimeout(() => menu.classList.add('show'), 10);
+            }
+        }
+
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobile-nav-popup');
+            if (mobileNav.style.display === 'block') {
+                mobileNav.classList.remove('show');
+                setTimeout(() => {
+                    mobileNav.style.display = 'none';
+                }, 300);
+            } else {
+                closeAllPopups();
+                mobileNav.style.display = 'block';
+                setTimeout(() => mobileNav.classList.add('show'), 10);
             }
         }
 
