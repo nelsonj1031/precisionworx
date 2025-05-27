@@ -206,7 +206,7 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(5px);
-            padding: 10px 20px;
+            padding: 10px;
             margin-top: 25px;
             z-index: 4;
             display: flex;
@@ -302,7 +302,34 @@
                 display: block;
             }
             .navbar {
-                justify-content: flex-end;
+                justify-content: center;
+                padding: 10px;
+            }
+            .menu, .mobile-nav-popup {
+                width: 80%;
+                max-width: 250px;
+            }
+            .services-popup, .facilities-popup, .certifications-popup, .contact-popup {
+                width: 80%;
+                max-width: 300px;
+            }
+            .menu .logo, .services-popup .logo, .facilities-popup .logo, .certifications-popup .logo, .contact-popup .logo {
+                max-width: 120px;
+                max-height: 120px;
+            }
+            .menu li, .mobile-nav-popup li {
+                font-size: 16px;
+            }
+            .services-popup li, .certifications-popup li, .contact-popup li {
+                font-size: 14px;
+            }
+            .services-popup .content, .certifications-popup .content, .contact-popup .content {
+                max-height: 350px;
+            }
+            .mobile-nav-popup li.home-icon-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
     </style>
@@ -335,7 +362,7 @@
         <ul id="mobile-nav-items">
             <li onclick="openServices()">Services</li>
             <li onclick="openFacilities()">Our Facilities</li>
-            <li><div class="home-icon"></div></li>
+            <li class="home-icon-item"><div class="home-icon"></div></li>
             <li onclick="openCertifications()">Certifications</li>
             <li onclick="openContact()">Contact</li>
         </ul>
