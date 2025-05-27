@@ -1,0 +1,595 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalistic Page with 3D Ring</title>
+    <style>
+        @font-face {
+            font-family: 'Flama';
+            src: url('Flama-Regular.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            overflow: hidden;
+        }
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(10px);
+            z-index: -1;
+        }
+        .logo {
+            max-width: 300px;
+            max-height: 300px;
+            z-index: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .menu, .services-popup, .facilities-popup, .certifications-popup, .contact-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2;
+            display: none;
+            color: #333;
+            text-align: center;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .menu.show, .services-popup.show, .facilities-popup.show, .certifications-popup.show, .contact-popup.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .menu {
+            width: 300px;
+        }
+        .services-popup, .facilities-popup, .certifications-popup, .contact-popup {
+            width: 400px;
+        }
+        .menu .logo, .services-popup .logo, .facilities-popup .logo, .certifications-popup .logo, .contact-popup .logo {
+            max-width: 150px;
+            max-height: 150px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .menu ul, .services-popup ul, .facilities-popup ul, .certifications-popup ul, .contact-popup ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menu li {
+            padding: 10px 0;
+            font-family: 'Flama', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            cursor: pointer;
+        }
+        .services-popup li, .certifications-popup li, .contact-popup li {
+            padding: 10px 0;
+            font-family: 'Flama', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: default;
+            text-align: left;
+        }
+        .menu li:hover {
+            color: #888;
+        }
+        .services-popup .field, .certifications-popup .field, .contact-popup .field {
+            color: #333;
+            font-weight: 700;
+        }
+        .services-popup .info, .certifications-popup .info, .contact-popup .info {
+            color: #666;
+        }
+        .services-popup .content, .certifications-popup .content, .contact-popup .content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .services-popup .content::-webkit-scrollbar,
+        .certifications-popup .content::-webkit-scrollbar,
+        .contact-popup .content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .services-popup .content::-webkit-scrollbar-track,
+        .certifications-popup .content::-webkit-scrollbar-track,
+        .contact-popup .content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .services-popup .content::-webkit-scrollbar-thumb,
+        .certifications-popup .content::-webkit-scrollbar-thumb,
+        .contact-popup .content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .contact-popup .info-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto 0;
+        }
+        .close-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            z-index: 3;
+        }
+        .close-icon::before,
+        .close-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 1.5px;
+            background: #333;
+        }
+        .close-icon::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+        .close-icon::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+        .close-icon:hover::before,
+        .close-icon:hover::after {
+            background: #888;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 10px 20px;
+            margin-top: 25px;
+            z-index: 4;
+            display: flex;
+            justify-content: center;
+            border: none;
+        }
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .navbar li {
+            font-family: 'Flama', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            cursor: pointer;
+        }
+        .navbar li:hover {
+            color: #888;
+        }
+        .home-icon {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            cursor: pointer;
+        }
+        .home-icon::before,
+        .home-icon::after {
+            content: '';
+            position: absolute;
+            background: #333;
+        }
+        .home-icon::before {
+            width: 18px;
+            height: 9px;
+            top: 0;
+            left: 0;
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+        }
+        .home-icon::after {
+            width: 12px;
+            height: 9px;
+            top: 9px;
+            left: 3px;
+            background: #333;
+        }
+        .home-icon:hover::before,
+        .home-icon:hover::after {
+            background: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <ul>
+            <li onclick="openServices()">Services</li>
+            <li onclick="openFacilities()">Our Facilities</li>
+            <li><div class="home-icon"></div></li>
+            <li onclick="openCertifications()">Certifications</li>
+            <li onclick="openContact()">Contact</li>
+        </ul>
+    </div>
+    <img src="logo.png" alt="Logo" class="logo" id="logo" onclick="toggleMenu()">
+    <div class="menu" id="menu">
+        <div class="close-icon" onclick="toggleMenu()"></div>
+        <ul id="menu-items">
+            <li onclick="openServices()">Services</li>
+            <li onclick="openFacilities()">Our Facilities</li>
+            <li onclick="openCertifications()">Certifications</li>
+            <li onclick="openContact()">Contact</li>
+        </ul>
+    </div>
+    <div class="services-popup" id="services-popup">
+        <div class="close-icon" onclick="closeServices()"></div>
+        <div class="content">
+            <ul id="services-items">
+                <li><span class="field">Swiss Turning, Multi-Axis CNC</span>
+                    <ul class="info">
+                        <li>Ability to produce small, high-precision, complex parts.</li>
+                        <li>Reduced cycle times due to lightning fast feed rates and tight efficient design.</li>
+                        <li>Single Process Machining – parts come off completed in one cycle.</li>
+                        <li>Multi-Axis results in the ability to mill features, radial cross holes, face holes, angle holes in 1 cycle.</li>
+                        <li>Lights Out capability – critical for obtaining attractive pricing for complex parts.</li>
+                    </ul>
+                    <span class="field">Work Envelope:</span>
+                    <ul class="info">
+                        <li>.040″ up to 1.250″ Dia. (1mm up to 32mm)</li>
+                        <li>.100″ up to 12” long. (2.5mm up to 304mm)</li>
+                    </ul>
+                </li>
+                <li><span class="field">Mill Turning, Multi-Axis CNC</span>
+                    <ul class="info">
+                        <li>Ability to produce mid to large-size, high-precision, complex parts.</li>
+                        <li>Reduced cycle times due to high RPM / high horsepower spindles and milling head.</li>
+                        <li>Single Process Machining – parts come off completed in one cycle.</li>
+                        <li>Multi-Axis results in the ability to mill features, radial cross holes, face holes, angle holes in 1 cycle.</li>
+                        <li>Lights Out capability – critical for obtaining attractive pricing for complex parts.</li>
+                    </ul>
+                    <span class="field">Work Envelope:</span>
+                    <ul class="info">
+                        <li>.500″ up to 8” Dia. (12.7mm up to 203mm)</li>
+                        <li>1” up to 12” long. (25.4mm up to 304mm)</li>
+                    </ul>
+                </li>
+                <li><span class="field">Horizontal Milling, High Speed CNC</span>
+                    <ul class="info">
+                        <li>Ability to produce small, medium and large, high precision, complex milled parts from rapid prototype to large production run quantities.</li>
+                        <li>Reduced cycle times due to lightning feed rates, high RPM spindles and 4th rotary axis.</li>
+                        <li>1-2 Process Machining – parts come off complete in 1-2 operations due to the ability to access multiple sides of component with 4th rotary axis.</li>
+                        <li>Multi-Axis results in the ability to high speed mill complex surfaces with high precision in all materials.</li>
+                        <li>Operator Error Risk Mitigation – multiple operations in fewer setups means less part handling resulting in tight tolerance, true positions and less opportunity for human error.</li>
+                        <li>Lights Out capability – critical for obtaining attractive pricing for complex parts.</li>
+                    </ul>
+                    <span class="field">Work Envelope:</span>
+                    <ul class="info">
+                        <li>.250” up to 22” Cube (6.3mm up to 800mm)</li>
+                    </ul>
+                </li>
+                <li><span class="field">5 Axis Milling, High Speed CNC</span>
+                    <ul class="info">
+                        <li>Ability to produce small, medium and large, high precision, complex milled parts from rapid prototype to mid-sized production run qtys.</li>
+                        <li>Reduced cycle times due to lightning feed rates, high RPM spindles and 4th & 5th rotary axis.</li>
+                        <li>1-2 Process Machining – parts come off complete in 1-2 operations due to the ability to access multiple sides of component with 4th & 5th rotary axis.</li>
+                        <li>Multi-Axis results in the ability to high speed mill complex surfaces & features with high precision in all materials.</li>
+                        <li>Operator Error Risk Mitigation – multiple operations in fewer setups means less part handling resulting in tight tolerance true positions and less opportunity for human error.</li>
+                        <li>Lights Out capability – critical for obtaining attractive pricing for complex parts.</li>
+                    </ul>
+                    <span class="field">Work Envelope:</span>
+                    <ul class="info">
+                        <li>.250” up to 22” Cube (6.3mm up to 800mm)</li>
+                    </ul>
+                </li>
+                <li><span class="field">Burnishing, Super Precision</span>
+                    <ul class="info">
+                        <li>Ability to roller burnish inner and outer, tapered, threaded, keywayed, interrupted and obstructed diameters in seconds, from rapid prototype to mid-sized production run qtys.</li>
+                        <li>Accurate Sizing – Tolerances within .0001 (.0025mm) are attainable.</li>
+                        <li>Low Micro Finishing – One pass can quickly reduce a 20-40 microinch (Ra) (0.5 to 1.0 micrometer) ground surface or an 80-120 microinch (2—3 micrometer) (Ra) turned surface to a mirror like 5 microinch (.125 micrometer)(Ra) finish or lower. Ideal for shafts running in bushings or oil seals.</li>
+                        <li>Work Hardening – Surface hardening of workpiece is obtained simultaneously with sizing and finishing. With certain materials, increase in surface hardness of up to 3 points on Rockwell “C” scale are attainable. A smooth, dense, hardened surface from roller burnishing, extends wear life, improves resistance to corrosion and reduces fatigue failures. Friction is also reduced resulting in noise reduction with shafts.</li>
+                        <li>Appearance Improvement – Machined parts can be roller burnished to lustrous, mirror like finishes.</li>
+                        <li>Fast Processing – Our innovative burnishing equipment is manufactured by industry leaders and can process parts in seconds. Parts are sized, finished and work hardened in one pass. This means high quality parts, produced in less time resulting in lower cost.</li>
+                    </ul>
+                    <span class="field">Work Envelope:</span>
+                    <ul class="info">
+                        <li>Diameter: .045” up to 2.504” (1.14mm up to 63.6mm)</li>
+                        <li>Length: .100” up to 144” long (2.54mm up to 1000mm)</li>
+                    </ul>
+                </li>
+                <li><span class="field">Thread Rolling</span>
+                    <ul class="info">
+                        <li>Ability to thread roll threads and knurls on countless types of materials, especially difficult ones, presented axially, tangentially or radially to the workpiece relying on the plasticity of the base material—its ability to deform—to permanently imprint the shape of the rolls on the workpiece blank.</li>
+                        <li>Work Hardening – Increase in Tensile / Shear Strength – Compression of the part material results in a work hardening condition from compressing the metal matrix, not cutting it away or disrupting the matrix flow. Thread rolling creates fatigue resistance in the thread. This hardened condition is part of the process, any subsequent heat treating of a rolled thread will have an annealing effect.</li>
+                        <li>Accuracy in Thread Profile and Dimensions – Rolled threads offer best in class accuracy, profile consistency and surface finishes. This includes pitch diameter, roundness, thread angle, lead, taper and drunkenness.</li>
+                        <li>Superior Wear & Corrosion Resistance – Components with rolled threads provide for superior wear resistance and resistance to corrosion, ideal for flight critical applications where maximum performance is required.</li>
+                        <li>Efficient & Fast Processing – In terms of time and cleanliness our large collection of axial, 2 and 3 die thread rollers enable fast efficient setups for prototype up to large production runs.</li>
+                        <li>Thread Forms: UN & AM, Acme, Worm, Whitworth, ANPT, Type A, Type B, BAIS, NPT, NPTF, NPSM, NPSL, NPSH, NPTR, Type C, Type F & BF, Drive Screw, Aero, Lok-Thread, Butress.</li>
+                    </ul>
+                    <span class="field">Work Envelope:</span>
+                    <ul class="info">
+                        <li>Diameter: .060” up to 2.504” (1.52mm up to 63.6mm)</li>
+                        <li>Length: .060” up to 3” long (1.52mm up to 76mm)</li>
+                        <li>Styles: Left Hand, Annular & Multiple Start</li>
+                        <li>Thread Per Inch (TPI): 2 – 80</li>
+                    </ul>
+                </li>
+                <li><span class="field">3D CAD Design, Manufacturing Analysis, 3D Rendering</span>
+                    <ul class="info">
+                        <li>CAD models – well designed CAD models, parts and or fasteners that are optimized for manufacturing in today’s precision CNC shop environment via the latest high-speed equipment can be difficult to procure. We have helped countless customers shave minutes (cost) off cleaning up old and outdated CAD models when your engineering team might be constrained or component cost needs to be improved without sacrificing quality. Not all company specific engineers are 100% efficient when it comes to production manufacturing.</li>
+                        <li>Drawing / Print Optimization – Prints should be clear, concise and or laid out per a standard be it global or company specific. HAPI consistently leverages its decades of experience in this arena mitigating errors and clearing up interpretation issues for the many aging drawings out there.</li>
+                        <li>GD&T – Our engineering team at HAPI is highly experienced and trained through AS9100 / ISO inspection and accreditation. We have obtained deep experience and practical knowledge over the past 50+ years in print interpretation and application of good GD&T practices in our CAD modeling and drawing work.</li>
+                        <li>Gaging & Fixturing – This is a direct result of the efforts we practice in house on a daily basis to manufacture the many complex components we do with best in class quality consistency and repeatability.</li>
+                    </ul>
+                    <span class="field">Work Envelope / Specifics:</span>
+                    <ul class="info">
+                        <li>Infinite Sizes</li>
+                        <li>Assemblies (Mechanical)</li>
+                        <li>Pipe & Tube Routing</li>
+                        <li>Flow Analysis</li>
+                        <li>Animation / Functionality</li>
+                        <li>3D Rendering</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="facilities-popup" id="facilities-popup">
+        <div class="close-icon" onclick="closeFacilities()"></div>
+        <div class="content">
+            <ul id="facilities-items"></ul>
+        </div>
+    </div>
+    <div class="certifications-popup" id="certifications-popup">
+        <div class="close-icon" onclick="closeCertifications()"></div>
+        <div class="content">
+            <ul id="certifications-items">
+                <li><span class="field">Certifications:</span>
+                    <ul class="info">
+                        <li>ISO9001:2015</li>
+                        <li>AS9100 Rev.D</li>
+                        <li>HUB Zone Certified (pending final approval)</li>
+                    </ul>
+                </li>
+                <li><span class="field">NAICS Codes:</span>
+                    <ul class="info">
+                        <li>332119</li>
+                        <li>332710</li>
+                        <li>332721</li>
+                        <li>333318</li>
+                        <li>335312</li>
+                        <li>336310</li>
+                        <li>336412</li>
+                        <li>326199</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="contact-popup" id="contact-popup">
+        <div class="close-icon" onclick="closeContact()"></div>
+        <div class="content">
+            <ul id="contact-items">
+                <li><span class="field">Email:</span> <span class="info">mm2@precisionworxpr.com</span></li>
+                <li><span class="field">Phone:</span> <span class="info">787-908-7272</span></li>
+                <li><span class="field">Address:</span> <span class="info">CARR PR-03 KM 100.2</span></li>
+                <li><span class="info">Parque Industrial Juan Martin Calle A</span></li>
+                <li><span class="info">P.O. Box 1536</span></li>
+                <li><span class="info">Yabucoa, Puerto Rico 00767</span></li>
+            </ul>
+            <img src="infoimage.jpg" alt="Info Image" class="info-image">
+        </div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const geometry = new THREE.TorusGeometry(10, 0.5, 16, 100);
+        const material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true });
+        const ring = new THREE.Mesh(geometry, material);
+        scene.add(ring);
+
+        camera.position.z = 20;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ring.rotation.x += 0.01;
+            ring.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        function closeAllPopups() {
+            const popups = ['menu', 'services-popup', 'facilities-popup', 'certifications-popup', 'contact-popup'];
+            const logo = document.getElementById('logo');
+            popups.forEach(popupId => {
+                const popup = document.getElementById(popupId);
+                if (popup.style.display === 'block') {
+                    popup.classList.remove('show');
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                    }, 300);
+                }
+            });
+            document.body.appendChild(logo);
+            logo.classList.remove('menu-open');
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            const logo = document.getElementById('logo');
+            const menuItems = document.getElementById('menu-items');
+            if (menu.style.display === 'block') {
+                menu.classList.remove('show');
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                    document.body.appendChild(logo);
+                    logo.classList.remove('menu-open');
+                }, 300);
+            } else {
+                closeAllPopups();
+                menu.style.display = 'block';
+                menu.insertBefore(logo, menuItems);
+                logo.classList.add('menu-open');
+                setTimeout(() => menu.classList.add('show'), 10);
+            }
+        }
+
+        function openServices() {
+            const popup = document.getElementById('services-popup');
+            const logo = document.getElementById('logo');
+            const items = document.getElementById('services-items');
+            closeAllPopups();
+            popup.style.display = 'block';
+            popup.insertBefore(logo, items.parentNode);
+            logo.classList.add('menu-open');
+            setTimeout(() => popup.classList.add('show'), 10);
+        }
+
+        function closeServices() {
+            const popup = document.getElementById('services-popup');
+            const logo = document.getElementById('logo');
+            popup.classList.remove('show');
+            setTimeout(() => {
+                popup.style.display = 'none';
+                document.body.appendChild(logo);
+                logo.classList.remove('menu-open');
+            }, 300);
+        }
+
+        function openFacilities() {
+            const popup = document.getElementById('facilities-popup');
+            const logo = document.getElementById('logo');
+            const items = document.getElementById('facilities-items');
+            closeAllPopups();
+            popup.style.display = 'block';
+            popup.insertBefore(logo, items.parentNode);
+            logo.classList.add('menu-open');
+            setTimeout(() => popup.classList.add('show'), 10);
+        }
+
+        function closeFacilities() {
+            const popup = document.getElementById('facilities-popup');
+            const logo = document.getElementById('logo');
+            popup.classList.remove('show');
+            setTimeout(() => {
+                popup.style.display = 'none';
+                document.body.appendChild(logo);
+                logo.classList.remove('menu-open');
+            }, 300);
+        }
+
+        function openCertifications() {
+            const popup = document.getElementById('certifications-popup');
+            const logo = document.getElementById('logo');
+            const items = document.getElementById('certifications-items');
+            closeAllPopups();
+            popup.style.display = 'block';
+            popup.insertBefore(logo, items.parentNode);
+            logo.classList.add('menu-open');
+            setTimeout(() => popup.classList.add('show'), 10);
+        }
+
+        function closeCertifications() {
+            const popup = document.getElementById('certifications-popup');
+            const logo = document.getElementById('logo');
+            popup.classList.remove('show');
+            setTimeout(() => {
+                popup.style.display = 'none';
+                document.body.appendChild(logo);
+                logo.classList.remove('menu-open');
+            }, 300);
+        }
+
+        function openContact() {
+            const popup = document.getElementById('contact-popup');
+            const logo = document.getElementById('logo');
+            const items = document.getElementById('contact-items');
+            closeAllPopups();
+            popup.style.display = 'block';
+            popup.insertBefore(logo, items.parentNode);
+            logo.classList.add('menu-open');
+            setTimeout(() => popup.classList.add('show'), 10);
+        }
+
+        function closeContact() {
+            const popup = document.getElementById('contact-popup');
+            const logo = document.getElementById('logo');
+            popup.classList.remove('show');
+            setTimeout(() => {
+                popup.style.display = 'none';
+                document.body.appendChild(logo);
+                logo.classList.remove('menu-open');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
