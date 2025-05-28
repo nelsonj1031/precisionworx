@@ -1,0 +1,76 @@
+Swiss Turning, Multi-Axis CNC
+- Ability to produce small, high-precision, complex parts.
+- Reduced cycle times due to lightning fast feed rates and tight efficient design.
+- Single Process Machining – parts come off completed in one cycle.
+- Multi-Axis results in the ability to mill features, radial cross holes, face holes, angle holes in 1 cycle.
+- Lights Out capability – critical for obtaining attractive pricing for complex parts.
+Work Envelope:
+- .040″ up to 1.250″ Dia. (1mm up to 32mm)
+- .100″ up to 12” long. (2.5mm up to 304mm)
+
+Mill Turning, Multi-Axis CNC
+- Ability to produce mid to large-size, high-precision, complex parts.
+- Reduced cycle times due to high RPM / high horsepower spindles and milling head.
+- Single Process Machining – parts come off completed in one cycle.
+- Multi-Axis results in the ability to mill features, radial cross holes, face holes, angle holes in 1 cycle.
+- Lights Out capability – critical for obtaining attractive pricing for complex parts.
+Work Envelope:
+- .500″ up to 8” Dia. (12.7mm up to 203mm)
+- 1” up to 12” long. (25.4mm up to 304mm)
+
+Horizontal Milling, High Speed CNC
+- Ability to produce small, medium and large, high precision, complex milled parts from rapid prototype to large production run quantities.
+- Reduced cycle times due to lightning feed rates, high RPM spindles and 4th rotary axis.
+- 1-2 Process Machining – parts come off complete in 1-2 operations due to the ability to access multiple sides of component with 4th rotary axis.
+- Multi-Axis results in the ability to high speed mill complex surfaces with high precision in all materials.
+- Operator Error Risk Mitigation – multiple operations in fewer setups means less part handling resulting in tight tolerance, true positions and less opportunity for human error.
+- Lights Out capability – critical for obtaining attractive pricing for complex parts.
+Work Envelope:
+- .250” up to 22” Cube (6.3mm up to 800mm)
+
+5 Axis Milling, High Speed CNC
+- Ability to produce small, medium and large, high precision, complex milled parts from rapid prototype to mid-sized production run qtys.
+- Reduced cycle times due to lightning feed rates, high RPM spindles and 4th & 5th rotary axis.
+- 1-2 Process Machining – parts come off complete in 1-2 operations due to the ability to access multiple sides of component with 4th & 5th rotary axis.
+- Multi-Axis results in the ability to high speed mill complex surfaces & features with high precision in all materials.
+- Operator Error Risk Mitigation – multiple operations in fewer setups means less part handling resulting in tight tolerance true positions and less opportunity for human error.
+- Lights Out capability – critical for obtaining attractive pricing for complex parts.
+Work Envelope:
+- .250” up to 22” Cube (6.3mm up to 800mm)
+
+Burnishing, Super Precision
+- Ability to roller burnish inner and outer, tapered, threaded, keywayed, interrupted and obstructed diameters in seconds, from rapid prototype to mid-sized production run qtys.
+- Accurate Sizing – Tolerances within .0001 (.0025mm) are attainable.
+- Low Micro Finishing – One pass can quickly reduce a 20-40 microinch (Ra) (0.5 to 1.0 micrometer) ground surface or an 80-120 microinch (2—3 micrometer) (Ra) turned surface to a mirror like 5 microinch (.125 micrometer)(Ra) finish or lower. Ideal for shafts running in bushings or oil seals.
+- Work Hardening – Surface hardening of workpiece is obtained simultaneously with sizing and finishing. With certain materials, increase in surface hardness of up to 3 points on Rockwell “C” scale are attainable. A smooth, dense, hardened surface from roller burnishing, extends wear life, improves resistance to corrosion and reduces fatigue failures. Friction is also reduced resulting in noise reduction with shafts.
+- Appearance Improvement – Machined parts can be roller burnished to lustrous, mirror like finishes.
+- Fast Processing – Our innovative burnishing equipment is manufactured by industry leaders and can process parts in seconds. Parts are sized, finished and work hardened in one pass. This means high quality parts, produced in less time resulting in lower cost.
+Work Envelope:
+- Diameter: .045” up to 2.504” (1.14mm up to 63.6mm)
+- Length: .100” up to 144” long (2.54mm up to 1000mm)
+
+Thread Rolling
+- Ability to thread roll threads and knurls on countless types of materials, especially difficult ones, presented axially, tangentially or radially to the workpiece relying on the plasticity of the base material—its ability to deform—to permanently imprint the shape of the rolls on the workpiece blank.
+- Work Hardening – Increase in Tensile / Shear Strength – Compression of the part material results in a work hardening condition from compressing the metal matrix, not cutting it away or disrupting the matrix flow. Thread rolling creates fatigue resistance in the thread. This hardened condition is part of the process, any subsequent heat treating of a rolled thread will have an annealing effect.
+- Accuracy in Thread Profile and Dimensions – Rolled threads offer best in class accuracy, profile consistency and surface finishes. This includes pitch diameter, roundness, thread angle, lead, taper and drunkenness.
+- Superior Wear & Corrosion Resistance – Components with rolled threads provide for superior wear resistance and resistance to corrosion, ideal for flight critical applications where maximum performance is required.
+- Efficient & Fast Processing – In terms of time and cleanliness our large collection of axial, 2 and 3 die thread rollers enable fast efficient setups for prototype up to large production runs.
+- Thread Forms: UN & AM, Acme, Worm, Whitworth, ANPT, Type A, Type B, BAIS, NPT, NPTF, NPSM, NPSL, NPSH, NPTR, Type C, Type F & BF, Drive Screw, Aero, Lok-Thread, Butress.
+Work Envelope:
+- Diameter: .060” up to 2.504” (1.52mm up to 63.6mm)
+- Length: .060” up to 3” long (1.52mm up to 76mm)
+- Styles: Left Hand, Annular & Multiple Start
+- Thread Per Inch (TPI): 2 – 80
+
+3D CAD Design, Manufacturing Analysis, 3D Rendering
+- CAD models – well designed CAD models, parts and or fasteners that are optimized for manufacturing in today’s precision CNC shop environment via the latest high-speed equipment can be difficult to procure. We have helped countless customers shave minutes (cost) off cleaning up old and outdated CAD models when your engineering team might be constrained or component cost needs to be improved without sacrificing quality. Not all company specific engineers are 100% efficient when it comes to production manufacturing.
+- Drawing / Print Optimization – Prints should be clear, concise and or laid out per a standard be it global or company specific. HAPI consistently leverages its decades of experience in this arena mitigating errors and clearing up interpretation issues for the many aging drawings out there.
+- GD&T – Our engineering team at HAPI is highly experienced and trained through AS9100 / ISO inspection and accreditation. We have obtained deep experience and practical knowledge over the past 50+ years in print interpretation and application of good GD&T practices in our CAD modeling and drawing work.
+- Gaging & Fixturing – This is a direct result of the efforts we practice in house on a daily basis to manufacture the many complex components we do with best in class quality consistency and repeatability.
+Work Envelope / Specifics:
+- Infinite Sizes
+- Assemblies (Mechanical)
+- Pipe & Tube Routing
+- Flow Analysis
+- Animation / Functionality
+- 3D Rendering
