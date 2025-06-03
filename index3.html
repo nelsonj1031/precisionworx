@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrecisionWorx | Aerospace Precision Manufacturing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0c4a6e',
+                        secondary: '#0ea5e9',
+                        accent: '#0284c7',
+                        dark: '#082f49'
+                    },
+                    fontFamily: {
+                        heading: ['Oswald', 'sans-serif'],
+                        body: ['Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0c4a6e;
+        }
+
+        .counter-animated {
+            transition: all 1s ease-out;
+        }
+
+        .gallery-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(8,47,73,0.8) 0%, rgba(8,47,73,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-item::after {
+            content: "View Details";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .capability-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .capability-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="font-body text-gray-800 bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center h-16">
+                <div class="flex items-center space-x-8">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary text-white font-bold text-lg px-3 py-1 rounded">
+                            <span class="text-secondary">PRECISION</span>WORX
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="#" class="text-primary border-b-2 border-secondary px-1 pb-1 text-sm font-medium">Home</a>
+                        <a href="#about" class="text-gray-500 hover:text-primary px-1 pb-1 text-sm font-medium">About</a>
+                        <a href="#capabilities" class="text-gray-500 hover:text-primary px-1 pb-1 text-sm font-medium">Capabilities</a>
+                        <a href="#industries" class="text-gray-500 hover:text-primary px-1 pb-1 text-sm font-medium">Industries</a>
+                        <a href="#gallery" class="text-gray-500 hover:text-primary px-1 pb-1 text-sm font-medium">Gallery</a>
+                        <a href="#contact" class="text-gray-500 hover:text-primary px-1 pb-1 text-sm font-medium">Contact</a>
+                        <a href="#contact" class="bg-secondary hover:bg-primary text-white px-4 py-1.5 rounded-md text-sm font-medium transition duration-300">Request Quote</a>
+                    </div>
+                    <button class="md:hidden text-gray-500 hover:text-primary focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section pt-20 bg-gradient-to-br from-gray-900 to-primary min-h-screen flex items-center relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
+            <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1581093458798-f0d378a76d38?q=80&w=2070&auto=format&fit=crop')"></div>
+            <div class="relative z-10 max-w-3xl">
+                <h1 class="text-4xl md:text-6xl font-heading font-bold text-white">
+                    Precision Manufacturing for the Aerospace Industry
+                </h1>
+                <p class="mt-6 text-xl text-gray-200 max-w-2xl">
+                    PrecisionWorx delivers exceptional quality aerospace components with cutting-edge technology and uncompromising precision.
+                </p>
+                <div class="mt-10 flex flex-wrap gap-4">
+                    <a href="#contact" class="bg-secondary hover:bg-accent text-white px-8 py-4 rounded-md font-bold text-lg transition duration-300">Get Your Quote</a>
+                    <a href="#capabilities" class="bg-gray-800 hover:bg-gray-700 text-white px-8 py-4 rounded-md font-bold text-lg transition duration-300">Our Capabilities</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Counter -->
+    <div class="bg-white py-12 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="counter-animated">
+                    <div class="text-4xl md:text-5xl font-heading font-bold text-primary" id="yearsCounter">0</div>
+                    <div class="mt-2 text-gray-600">Years Experience</div>
+                </div>
+                <div class="counter-animated">
+                    <div class="text-4xl md:text-5xl font-heading font-bold text-primary" id="clientsCounter">0</div>
+                    <div class="mt-2 text-gray-600">Satisfied Clients</div>
+                </div>
+                <div class="counter-animated">
+                    <div class="text-4xl md:text-5xl font-heading font-bold text-primary" id="partsCounter">0</div>
+                    <div class="mt-2 text-gray-600">Parts Produced</div>
+                </div>
+                <div class="counter-animated">
+                    <div class="text-4xl md:text-5xl font-heading font-bold text-primary" id="machinesCounter">0</div>
+                    <div class="mt-2 text-gray-600">Advanced Machines</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">
+                        Excellence in Aerospace Manufacturing
+                    </h2>
+                    <p class="mt-6 text-gray-600 text-lg">
+                        Since 2003, PrecisionWorx has been at the forefront of aerospace manufacturing, delivering critical components with uncompromising precision.
+                    </p>
+                    <p class="mt-4 text-gray-600">
+                        Our dedicated team of engineers and technicians brings unparalleled expertise to every project, from prototyping to full-scale production. We pride ourselves on maintaining the highest quality standards while meeting the stringent requirements of the aerospace industry.
+                    </p>
+                    <div class="mt-8">
+                        <div class="flex items-center mt-4">
+                            <div class="flex-shrink-0 bg-secondary rounded-full p-2">
+                                <i class="fas fa-certificate text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-primary">AS9100D Certified</h3>
+                                <p class="mt-1 text-gray-600">Meeting the rigorous quality management requirements for aviation, space, and defense.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4">
+                            <div class="flex-shrink-0 bg-secondary rounded-full p-2">
+                                <i class="fas fa-microscope text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-primary">In-House Quality Control</h3>
+                                <p class="mt-1 text-gray-600">Comprehensive inspection capabilities including CMM, surface analysis, and material testing.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4">
+                            <div class="flex-shrink-0 bg-secondary rounded-full p-2">
+                                <i class="fas fa-cogs text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-primary">Continuous Improvement</h3>
+                                <p class="mt-1 text-gray-600">Regular investment in technology, training, and process optimization.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1586769852836-bc069f19e1b6?q=80&w=2070&auto=format&fit=crop" alt="Precision Manufacturing" class="rounded-xl shadow-xl">
+                        <div class="absolute -bottom-6 -right-6 bg-secondary text-white p-8 rounded-lg shadow-lg">
+                            <div class="text-4xl font-bold">25+</div>
+                            <div>Years of Excellence</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capabilities Section -->
+    <section id="capabilities" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">Our Manufacturing Capabilities</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-gray-600">PrecisionWorx offers comprehensive machining services with state-of-the-art technology and expert craftsmanship.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="capability-card bg-white rounded-xl shadow-lg p-8 hover:border-l-4 hover:border-secondary">
+                    <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-cog text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">5-Axis CNC Machining</h3>
+                    <p class="mt-4 text-gray-600">
+                        High-precision 5-axis machining capabilities for complex aerospace geometries with tight tolerances (±0.0001").
+                    </p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Aluminum</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Titanium</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Stainless Steel</span>
+                    </div>
+                </div>
+                
+                <div class="capability-card bg-white rounded-xl shadow-lg p-8 hover:border-l-4 hover:border-secondary">
+                    <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-ruler-combined text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Precision Grinding</h3>
+                    <p class="mt-4 text-gray-600">
+                        Surface, cylindrical and centerless grinding services for exceptional flatness, parallelism and surface finishes.
+                    </p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Surface Finish Ra 4</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Tolerances ±0.00005"</span>
+                    </div>
+                </div>
+                
+                <div class="capability-card bg-white rounded-xl shadow-lg p-8 hover:border-l-4 hover:border-secondary">
+                    <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-fire text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">EDM Machining</h3>
+                    <p class="mt-4 text-gray-600">
+                        Wire and sinker EDM services for complex shapes in hardened materials without tool pressure or distortion.
+                    </p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Hardened Steels</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Exotic Alloys</span>
+                    </div>
+                </div>
+                
+                <div class="capability-card bg-white rounded-xl shadow-lg p-8 hover:border-l-4 hover:border-secondary">
+                    <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-wrench text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Tooling & Fixturing</h3>
+                    <p class="mt-4 text-gray-600">
+                        Custom tooling design and manufacturing to optimize production efficiency and part quality.
+                    </p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Modular Fixtures</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Specialty Holders</span>
+                    </div>
+                </div>
+                
+                <div class="capability-card bg-white rounded-xl shadow-lg p-8 hover:border-l-4 hover:border-secondary">
+                    <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-vial text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Quality Assurance</h3>
+                    <p class="mt-4 text-gray-600">
+                        Comprehensive inspection capabilities including CMM, optical comparators, surface roughness testing and more.
+                    </p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">CMM Inspection</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">GD&T</span>
+                    </div>
+                </div>
+                
+                <div class="capability-card bg-white rounded-xl shadow-lg p-8 hover:border-l-4 hover:border-secondary">
+                    <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-layer-group text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Additive Manufacturing</h3>
+                    <p class="mt-4 text-gray-600">
+                        Rapid prototyping and production with metal additive manufacturing for lightweight aerospace components.
+                    </p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">DMLS</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Ti64</span>
+                        <span class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-primary">Inconel</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Section -->
+    <div class="parallax py-40 flex items-center" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop')">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-heading font-bold text-white">
+                Engineering Tomorrow's Aerospace Solutions Today
+            </h2>
+            <p class="mt-6 text-xl text-gray-200 max-w-3xl mx-auto">
+                With cutting-edge technology and decades of expertise, we deliver precision components that meet the most demanding aerospace requirements.
+            </p>
+            <a href="#contact" class="mt-10 inline-block bg-secondary hover:bg-accent text-white px-8 py-4 rounded-md font-bold text-lg transition duration-300">Start Your Project</a>
+        </div>
+    </div>
+
+    <!-- Industries Section -->
+    <section id="industries" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">Aerospace Specialties</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-gray-600">PrecisionWorx manufactures mission-critical components for every sector of the aerospace industry.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center mx-auto">
+                        <i class="fas fa-plane text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="mt-4 text-xl font-bold text-center text-primary">Airframe Components</h3>
+                    <ul class="mt-6 space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Bulkheads & Frames</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Wing Components</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Landing Gear Parts</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Structural Mounts</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center mx-auto">
+                        <i class="fas fa-fan text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="mt-4 text-xl font-bold text-center text-primary">Engine Components</h3>
+                    <ul class="mt-6 space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Turbine Blades & Vanes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Combustion Chambers</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Compressor Components</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Fuel System Parts</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center mx-auto">
+                        <i class="fas fa-satellite text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="mt-4 text-xl font-bold text-center text-primary">Space Systems</h3>
+                    <ul class="mt-6 space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Satellite Components</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Rocket Propulsion</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Launch Vehicle Structures</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Orbital Mechanisms</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center mx-auto">
+                        <i class="fas fa-microchip text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="mt-4 text-xl font-bold text-center text-primary">Avionics Enclosures</h3>
+                    <ul class="mt-6 space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Flight Control Housings</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Sensor Mounts</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>EMI/RFI Shielding</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Thermal Management</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center mx-auto">
+                        <i class="fas fa-helicopter text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="mt-4 text-xl font-bold text-center text-primary">Rotorcraft Systems</h3>
+                    <ul class="mt-6 space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Rotor Head Components</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Swashplate Assemblies</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Transmission Parts</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Vibration Control</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center mx-auto">
+                        <i class="fas fa-drafting-compass text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="mt-4 text-xl font-bold text-center text-primary">Prototyping & R&D</h3>
+                    <ul class="mt-6 space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Concept Development</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Functional Prototypes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Testing Components</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-secondary mt-1 mr-2"></i>
+                            <span>Pre-Production Runs</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">Precision Manufacturing Gallery</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-gray-600">See examples of our precision work for aerospace applications.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="gallery-item overflow-hidden rounded-xl relative cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5a0af78?q=80&w=2070&auto=format&fit=crop" alt="Aerospace Components" class="w-full h-80 object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                
+                <div class="gallery-item overflow-hidden rounded-xl relative cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1974&auto=format&fit=crop" alt="CNC Machining" class="w-full h-80 object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                
+                <div class="gallery-item overflow-hidden rounded-xl relative cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?q=80&w=2070&auto=format&fit=crop" alt="Precision Measurement" class="w-full h-80 object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                
+                <div class="gallery-item overflow-hidden rounded-xl relative cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1593079831268-3381b0db7a7e?q=80&w=2069&auto=format&fit=crop" alt="Aerospace Assembly" class="w-full h-80 object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                
+                <div class="gallery-item overflow-hidden rounded-xl relative cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1586769852836-bc069f19e1b6?q=80&w=2070&auto=format&fit=crop" alt="Manufacturing Facility" class="w-full h-80 object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                
+                <div class="gallery-item overflow-hidden rounded-xl relative cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1541414778237-1a8b6e4d1c13?q=80&w=2070&auto=format&fit=crop" alt="Quality Control" class="w-full h-80 object-cover transform hover:scale-110 transition duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">Request a Quote</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-gray-600">Have a project in mind? Contact our engineering team to discuss your requirements.</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div class="bg-white rounded-xl shadow-xl p-8">
+                    <form id="quoteForm">
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label for="name" class="block text-gray-700 font-medium">Name</label>
+                                <input type="text" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring focus:ring-secondary focus:ring-opacity-50" required>
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-gray-700 font-medium">Email</label>
+                                <input type="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring focus:ring-secondary focus:ring-opacity-50" required>
+                            </div>
+                            
+                            <div>
+                                <label for="company" class="block text-gray-700 font-medium">Company</label>
+                                <input type="text" id="company" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring focus:ring-secondary focus:ring-opacity-50" required>
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-gray-700 font-medium">Phone</label>
+                                <input type="tel" id="phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring focus:ring-secondary focus:ring-opacity-50">
+                            </div>
+                            
+                            <div>
+                                <label for="parts" class="block text-gray-700 font-medium">Part Description</label>
+                                <textarea id="parts" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring focus:ring-secondary focus:ring-opacity-50" required></textarea>
+                            </div>
+                            
+                            <div>
+                                <label for="materials" class="block text-gray-700 font-medium">Materials</label>
+                                <textarea id="materials" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring focus:ring-secondary focus:ring-opacity-50" placeholder="Aluminum, Titanium, etc."></textarea>
+                            </div>
+                            
+                            <div>
+                                <label for="drawings" class="block text-gray-700 font-medium">Upload Drawings/Files</label>
+                                <input type="file" id="drawings" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+                            </div>
+                            
+                            <div>
+                                <button type="submit" class="w-full bg-secondary hover:bg-accent text-white font-bold py-3 px-4 rounded-md transition duration-300">Request Quote</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-heading font-bold text-primary">Contact Information</h3>
+                    
+                    <div class="mt-8 space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Our Location</h4>
+                                <p class="mt-1 text-gray-600">
+                                    123 Precision Way<br>
+                                    Manufacturing District<br>
+                                    Aerospace City, AS 98765
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary flex items-center justify-center">
+                                <i class="fas fa-phone-alt text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Phone & Fax</h4>
+                                <p class="mt-1 text-gray-600">
+                                    Phone: (555) 123-4567<br>
+                                    Fax: (555) 123-4568<br>
+                                    Emergency Line: (555) 123-4570
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary flex items-center justify-center">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Email</h4>
+                                <p class="mt-1 text-gray-600">
+                                    General Inquiries: info@precisionworx.com<br>
+                                    Engineering Support: engineering@precisionworx.com<br>
+                                    Quality Assurance: quality@precisionworx.com
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary flex items-center justify-center">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Operating Hours</h4>
+                                <p class="mt-1 text-gray-600">
+                                    Monday-Friday: 7:00 AM - 7:00 PM<br>
+                                    Saturday: 8:00 AM - 4:00 PM<br>
+                                    Sunday: Closed
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <h4 class="text-lg font-bold text-primary">Follow Us</h4>
+                        <div class="flex mt-4 space-x-4">
+                            <a href="#" class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center hover:bg-secondary hover:text-white transition duration-300">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center hover:bg-secondary hover:text-white transition duration-300">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center hover:bg-secondary hover:text-white transition duration-300">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center hover:bg-secondary hover:text-white transition duration-300">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="text-2xl font-bold">
+                        <span class="text-secondary">PRECISION</span>WORX
+                    </div>
+                    <p class="mt-4 text-gray-200">
+                        Delivering aerospace manufacturing excellence through precision machining, quality assurance, and engineering expertise.
+                    </p>
+                    <div class="mt-6">
+                        <img src="https://images.unsplash.com/photo-1611034540516-d4a2db7e1a91?q=80&w=2070&auto=format&fit=crop" alt="AS9100D Certified" class="w-48 opacity-90">
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-heading font-bold">Quick Links</h4>
+                    <ul class="mt-6 space-y-3">
+                        <li><a href="#" class="text-gray-200 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="#about" class="text-gray-200 hover:text-white transition duration-300">About Us</a></li>
+                        <li><a href="#capabilities" class="text-gray-200 hover:text-white transition duration-300">Capabilities</a></li>
+                        <li><a href="#industries" class="text-gray-200 hover:text-white transition duration-300">Industries</a></li>
+                        <li><a href="#gallery" class="text-gray-200 hover:text-white transition duration-300">Gallery</a></li>
+                        <li><a href="#contact" class="text-gray-200 hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-heading font-bold">Capabilities</h4>
+                    <ul class="mt-6 space-y-3">
+                        <li><a href="#" class="text-gray-200 hover:text-white transition duration-300">CNC Machining</a></li>
+                        <li><a href="#" class="text-gray-200 hover:text-white transition duration-300">Precision Grinding</a></li>
+                        <li><a href="#" class="text-gray-200 hover:text-white transition duration-300">EDM Machining</a></li>
+                        <li><a href="#" class="text-gray-200 hover:text-white transition duration-300">Tooling & Fixturing</a></li>
+                        <li><a href="#" class="text-gray-200 hover:text-white transition duration-300">Additive Manufacturing</a></li>
+                        <li><a href="#" class="text-gray-200 hover:text-white transition duration-300">Quality Inspection</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-heading font-bold">Newsletter</h4>
+                    <p class="mt-4 text-gray-200">
+                        Subscribe to our newsletter for the latest updates in aerospace manufacturing.
+                    </p>
+                    <form class="mt-6">
+                        <div class="flex">
+                            <input type="email" placeholder="Your email address" class="px-4 py-3 w-full rounded-l-md focus:outline-none text-gray-800">
+                            <button class="bg-secondary hover:bg-accent px-4 rounded-r-md transition duration-300">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="mt-10">
+                        <h5 class="text-gray-200 font-medium">Emergency Support</h5>
+                        <div class="mt-2 bg-dark p-4 rounded-md">
+                            <div class="flex items-center">
+                                <i class="fas fa-phone-volume text-secondary text-xl mr-3"></i>
+                                <span class="text-lg font-bold">(555) 123-4570</span>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-300">24/7 support for urgent aerospace production needs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>© 2023 PrecisionWorx Manufacturing Inc. All rights reserved.</p>
+                <p class="mt-2">Certified to AS9100D Quality Management Standards</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 3D Torus Background
+        const heroSection = document.querySelector('.hero-section');
+        if (heroSection) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0); // Transparent background
+            renderer.domElement.style.position = 'absolute';
+            renderer.domElement.style.top = '0';
+            renderer.domElement.style.left = '0';
+            renderer.domElement.style.zIndex = '0';
+            renderer.domElement.style.opacity = '0.3';
+            renderer.domElement.style.filter = 'blur(8px)';
+            heroSection.appendChild(renderer.domElement);
+
+            // Create torus
+            const geometry = new THREE.TorusGeometry(1.5, 0.5, 16, 100);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0x0ea5e9,
+                transparent: true,
+                opacity: 0.3
+            });
+            const torus = new THREE.Mesh(geometry, material);
+            scene.add(torus);
+
+            camera.position.z = 5;
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                torus.rotation.x += 0.005;
+                torus.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Counter Animation
+        function animateCounter(id, start, end, duration, suffix = '') {
+            let range = end - start;
+            let current = start;
+            let increment = end > start ? 1 : -1;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            let counterElement = document.getElementById(id);
+            
+            let timer = setInterval(function() {
+                current += increment;
+                counterElement.innerHTML = current + suffix;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // Initialize counters when scrolled into view
+        function initCounters() {
+            animateCounter('yearsCounter', 0, 25, 2000, '+');
+            animateCounter('clientsCounter', 0, 275, 2000, '+');
+            animateCounter('partsCounter', 0, 12500000, 2000, '+');
+            animateCounter('machinesCounter', 0, 42, 2000);
+        }
+
+        // Form submission
+        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your request! Our engineering team will contact you shortly.');
+            this.reset();
+        });
+
+        // Initialize on load
+        window.addEventListener('load', function() {
+            initCounters();
+            
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
